@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.views import generic
+from .models import Game
 
 # Create your views here.
+class GameList(generic.ListView):
+    queryset = Game.objects.all()
+    template_name = "game_list.html"
 
-
-def my_library(request):
-    return HttpResponse("Hello, Library!")
