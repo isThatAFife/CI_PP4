@@ -5,10 +5,10 @@ from django_summernote.admin import SummernoteModelAdmin
 @admin.register(Game)
 class GameAdmin(SummernoteModelAdmin):
 
-    list_display = ('title', 'slug', 'year')
-    search_fields = ['title']
-    list_filter = ('year',)
-    prepopulated_fields = {'slug': ('title',)}
+    list_display = ('name', 'metascore', 'date')
+    search_fields = ['name']
+    list_filter = ('date','metascore')
+    prepopulated_fields = {'name': ('metascore',)}
     summernote_fields = ('content',)
 
 # Register your models here.
