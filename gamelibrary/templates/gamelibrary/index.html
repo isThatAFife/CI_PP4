@@ -9,21 +9,21 @@
         <!-- Blog Entries Column -->
         <div class="col-12 mt-3 left">
             <div class="row">
-                {% for post in post_list %}
+                {% for game in game_list %}
                 <div class="col-md-4">
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="image-container">
                                 <div class="image-flash">
-                                    <p class="author">Author: {{ post.author }}</p>
+                                    <p class="author">{{ game.console }}</p>
                                 </div>
                             </div>
                             <a href="#" class="post-link">
-                                <h2 class="card-title">{{ post.title }}</h2>
+                                <h2 class="card-title">{{ game.name }}</h2>
                             </a>
 
                             <hr />
-                            <p class="card-text text-muted h6">{{ post.created_on}}
+                            <p class="card-text text-muted h6">Metascore: {{ game.metascore }}
                             </p>
                         </div>
                     </div>
@@ -49,4 +49,8 @@
 </div>
 
 <!-- index.html content ends here -->
+{% endblock %}
+
+{% block copyright %}
+    Copyright 2024 Dylan K.
 {% endblock %}

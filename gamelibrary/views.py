@@ -6,5 +6,5 @@ from .models import Game
 class GameList(generic.ListView):
     queryset = Game.objects.all()
     template_name = "gamelibrary/index.html"
-    paginate_by = 6
+    paginate_by = 18
 
