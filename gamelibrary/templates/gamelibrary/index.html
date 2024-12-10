@@ -18,7 +18,7 @@
                                     <p class="author">{{ game.console }}</p>
                                 </div>
                             </div>
-                            <a href="#" class="post-link">
+                            <a href="{% url 'game_detail' game.slug %}" class="post-link">
                                 <h2 class="card-title">{{ game.name }}</h2>
                             </a>
 
