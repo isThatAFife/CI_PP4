@@ -23,11 +23,11 @@ def game_detail(request, slug):
     :template:`blog/post_detail.html`
     """
 
-    queryset = Game.objects.filter(all)
-    post = get_object_or_404(queryset, slug=slug)
+    queryset = Game.objects.all()
+    game = get_object_or_404(queryset, slug=slug)
 
     return render(
         request,
-        "blog/post_detail.html",
-        {"post": post},
+        "gamelibrary/game_detail.html",
+        {"game": game},
     )
