@@ -12,8 +12,10 @@ django-extensions==3.2.3
 django-summernote==0.8.20.0
 gunicorn==23.0.0
 idna==3.10
+igdb-api-v4==0.3.3
 oauthlib==3.2.2
 packaging==24.2
+protobuf==5.29.1
 psycopg2==2.9.10
 psycopg2-binary==2.9.10
 pycparser==2.22
