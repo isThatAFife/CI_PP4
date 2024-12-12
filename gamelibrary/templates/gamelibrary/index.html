@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -16,7 +17,9 @@
                             <div class="image-container">
                                 {% if game.cover_url %}
                                 <img src="{{ game.cover_url }}" alt="{{ game.title }} cover">
-                            {% endif %}
+                                {% else %}
+                <img src="{% static 'images/default.webp' %}" class="game-cover" alt="{{ game.title }} default cover">
+            {% endif %}
                                 <div class="image-flash">
                                     <p class="author">{{ game.console }}</p>
                                 </div>

@@ -28,7 +28,7 @@ def igdb_request(endpoint, query, access_token, client_id):
 
 
 class GameList(generic.ListView):
-    queryset = Game.objects.all().order_by('-metascore')
+    queryset = Game.objects.all().order_by('slug')
     template_name = "gamelibrary/index.html"
     paginate_by = 6
 
@@ -56,7 +56,7 @@ class GameList(generic.ListView):
 
 
 def game_detail(request, slug):
-    queryset = Game.objects.all().order_by('-metascore')
+    queryset = Game.objects.all().order_by('slug')
     game = get_object_or_404(queryset, slug=slug)
 
     # Fetch cover from IGDB
