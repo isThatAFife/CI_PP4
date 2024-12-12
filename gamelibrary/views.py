@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.conf import settings
+from django.contrib import messages
 from .models import Game
+from .forms import CommentForm
 import requests
 
 
@@ -35,7 +37,7 @@ class GameList(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         games = context['object_list']
-        
+
         # Fetch covers for all games
         client_id = settings.IGDB_CLIENT_ID
         client_secret = settings.IGDB_CLIENT_SECRET
@@ -44,20 +46,38 @@ class GameList(generic.ListView):
         for game in games:
             if not game.cover_url:
                 query = f'fields name,cover.url; where name ~ "{game.name}";'
-                igdb_games = igdb_request("games", query, access_token, client_id)
+                igdb_games = igdb_request(
+                    "games", query, access_token, client_id)
                 if igdb_games and 'cover' in igdb_games[0]:
                     cover_url = igdb_games[0]['cover']['url']
-                    high_quality_url = cover_url.replace('t_thumb', 't_cover_big')
+                    high_quality_url = cover_url.replace(
+                        't_thumb', 't_cover_big')
                     game.cover_url = high_quality_url
                     game.save()
 
         return context
 
 
-
 def game_detail(request, slug):
     queryset = Game.objects.all().order_by('-metascore')
     game = get_object_or_404(queryset, slug=slug)
+    comments = game.comments.all().order_by("-created_on")
+    comment_count = game.comments.filter(approved=True).count()
+    
+    if request.method == "POST":
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.post = game
+            comment.save()
+            
+            messages.add_message(
+                request, messages.SUCCESS,
+                'Comment submitted and awaiting approval'
+    )
+        
+    comment_form = CommentForm()
 
     # Fetch cover from IGDB
     client_id = settings.IGDB_CLIENT_ID
@@ -66,7 +86,6 @@ def game_detail(request, slug):
 
     query = f'fields name,cover.url; where name ~ "{game.name}";'
     igdb_games = igdb_request("games", query, access_token, client_id)
-
 
     if igdb_games and 'cover' in igdb_games[0]:
         cover_url = igdb_games[0]['cover']['url']
@@ -77,5 +96,10 @@ def game_detail(request, slug):
     return render(
         request,
         "gamelibrary/game_detail.html",
-        {"game": game},
+        {
+            "game": game,
+            "comments": comments,
+            "comment_count": comment_count,
+            "comment_form": comment_form,
+        },
     )

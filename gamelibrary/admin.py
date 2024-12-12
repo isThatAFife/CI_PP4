@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game
+from .models import Game, Comment
 from django_summernote.admin import SummernoteModelAdmin
 
 @admin.register(Game)
@@ -11,4 +11,4 @@ class GameAdmin(SummernoteModelAdmin):
     prepopulated_fields = {'name': ('metascore',)}
     summernote_fields = ('content',)
 
-# Register your models here.
+admin.site.register(Comment)
