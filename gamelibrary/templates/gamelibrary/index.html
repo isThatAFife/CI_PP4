@@ -10,10 +10,13 @@
         <div class="col-12 mt-3 left">
             <div class="row">
                 {% for game in game_list %}
-                <div class="col-md-6">
-                    <div class="card mb-6">
+                <div class="col-md-4">
+                    <div class="card mb-4">
                         <div class="card-body">
                             <div class="image-container">
+                                {% if game.cover_url %}
+                                <img src="{{ game.cover_url }}" alt="{{ game.title }} cover">
+                            {% endif %}
                                 <div class="image-flash">
                                     <p class="author">{{ game.console }}</p>
                                 </div>
@@ -28,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                {% if forloop.counter|divisibleby:2 %}
+                {% if forloop.counter|divisibleby:3 %}
             </div>
             <div class="row">
                 {% endif %}

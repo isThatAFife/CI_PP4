@@ -13,6 +13,7 @@ class Game(models.Model):
     userscore = models.CharField(max_length=3, default='0')
     date = models.CharField(max_length=100, default='1998')
     slug = models.SlugField(max_length=250, blank=True, unique=True)
+    cover_url = models.URLField(blank=True, null=True)
     
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -9,7 +9,9 @@
                 <p class="post-subtitle">{{ game.console }} | {{ game.date }}</p>
             </div>
             <div class="d-none d-md-block col-md-6 masthead-image">
-                <img src="{% static 'images/default.webp' %}" class="scale" alt="placeholder">
+                {% if game.cover_url %}
+                <img src="{{ game.cover_url }}" alt="{{ game.title }} cover" class="scale">
+            {% endif %}
             </div>
         </div>
     </div>
