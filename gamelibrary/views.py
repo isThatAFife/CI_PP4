@@ -12,6 +12,12 @@ from .models import Comment
 
 @login_required
 def user_comments(request):
+    """
+    Display comments made by the logged-in user.
+
+    This view fetches all comments made by the current user, ordered by creation date,
+    and renders them in the user_comments.html template.
+    """
     user_comments = (
         Comment.objects.filter(author=request.user)
         .select_related("post")
@@ -23,6 +29,16 @@ def user_comments(request):
 
 
 def get_igdb_access_token(client_id, client_secret):
+    """
+    Obtain an access token from the IGDB API.
+
+    Args:
+        client_id (str): The IGDB client ID.
+        client_secret (str): The IGDB client secret.
+
+    Returns:
+        str: The access token for IGDB API requests.
+    """
     url = "https://id.twitch.tv/oauth2/token"
     params = {
         "client_id": client_id,
@@ -34,6 +50,18 @@ def get_igdb_access_token(client_id, client_secret):
 
 
 def igdb_request(endpoint, query, access_token, client_id):
+    """
+    Make a request to the IGDB API.
+
+    Args:
+        endpoint (str): The IGDB API endpoint.
+        query (str): The query string for the API request.
+        access_token (str): The IGDB API access token.
+        client_id (str): The IGDB client ID.
+
+    Returns:
+        dict: The JSON response from the IGDB API.
+    """
     url = f"https://api.igdb.com/v4/{endpoint}"
     headers = {
         "Client-ID": client_id,
@@ -45,15 +73,27 @@ def igdb_request(endpoint, query, access_token, client_id):
 
 
 class GameList(generic.ListView):
+    """
+    A view to display a list of games.
+
+    This view fetches all games from the database, orders them by metascore,
+    and displays them in a paginated list. It also fetches cover images for games
+    that don't have one stored locally.
+    """
     queryset = Game.objects.all().order_by("-metascore")
     template_name = "gamelibrary/index.html"
     paginate_by = 6
 
     def get_context_data(self, **kwargs):
+        """
+        Add cover images to the context data for each game.
+
+        This method fetches cover images from the IGDB API for games that don't have
+        a cover URL stored locally.
+        """
         context = super().get_context_data(**kwargs)
         games = context["object_list"]
 
-        # Fetch covers for all games
         client_id = settings.IGDB_CLIENT_ID
         client_secret = settings.IGDB_CLIENT_SECRET
         access_token = get_igdb_access_token(client_id, client_secret)
@@ -72,6 +112,20 @@ class GameList(generic.ListView):
 
 
 def game_detail(request, slug):
+    """
+    Display details of a specific game and handle comment submissions.
+
+    This view fetches a game by its slug, displays its details, comments, and a form
+    for submitting new comments. It also fetches the game's cover image from IGDB if
+    it's not already stored locally.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        slug (str): The slug of the game to display.
+
+    Returns:
+        HttpResponse: The rendered game detail page.
+    """
     queryset = Game.objects.all().order_by("-metascore")
     game = get_object_or_404(queryset, slug=slug)
     comments = game.comments.all().order_by("-created_on")

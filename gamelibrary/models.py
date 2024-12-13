@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 
-
-# Create your models here.
-
-
 class Game(models.Model):
+    """
+    Represents a video game in the game library.
+
+    This model stores information about individual games, including their name,
+    scores, console, release date, and cover image URL.
+    """
 
     name = models.CharField(max_length=200, unique=False, null=False)
     metascore = models.IntegerField(default=0)
@@ -17,6 +19,12 @@ class Game(models.Model):
     cover_url = models.URLField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        """
+        Custom save method to generate a unique slug for each game.
+
+        The slug is created by combining the game's name and console.
+        If a slug already exists, a number is appended to ensure uniqueness.
+        """
         if not self.slug:
             # Combine name and console, then slugify
             slug_str = f"{self.name} {self.console}"
@@ -34,8 +42,10 @@ class Game(models.Model):
 
 class Comment(models.Model):
     """
-    Stores a single comment entry related to :model:`auth.User`
-    and :model:`gamelibrary.Game`.
+    Represents a user comment on a game.
+
+    This model stores individual comments related to a specific game and user,
+    including the comment body, approval status, and creation timestamp.
     """
 
     post = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="comments")
