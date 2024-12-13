@@ -5,6 +5,14 @@ from django.contrib import messages
 from .models import Game
 from .forms import CommentForm
 import requests
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import Comment
+
+@login_required
+def user_comments(request):
+    user_comments = Comment.objects.filter(author=request.user).select_related('post').order_by('-created_on')
+    return render(request, 'gamelibrary/user_comments.html', {'comments': user_comments})
 
 
 def get_igdb_access_token(client_id, client_secret):

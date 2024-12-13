@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>My Comments</h2>
+{% if comments %}
+{% for comment in comments %}
+<div class="comment">
+    <p>{{ comment.body }}</p>
+    <p>Posted on: {{ comment.created_on }}</p>
+    <p>On post: <a href="{% url 'game_detail' slug=comment.post.slug %}">{{ comment.post.name }}</a>
+{% endfor %}
+{% else %}
+<p>You haven't made any comments yet.</p>
+{% endif %}
+{% endblock %}
