@@ -8,6 +8,7 @@ import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 
 
 @login_required
@@ -208,3 +209,26 @@ def comment_delete(request, slug, comment_id):
         messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
 
     return HttpResponseRedirect(reverse('game_detail', args=[slug]))
+
+def search_view(request):
+    query = request.GET.get('q', '')
+    if query:
+        games = Game.objects.filter(
+            Q(name__icontains=query) | 
+            Q(console__icontains=query) |
+            Q(date__icontains=query)
+        )
+        comments = Comment.objects.filter(
+            Q(body__icontains=query) |
+            Q(author__username__icontains=query)
+        )
+    else:
+        games = Game.objects.none()
+        comments = Comment.objects.none()
+    
+    context = {
+        'query': query,
+        'games': games,
+        'comments': comments,
+    }
+    return render(request, 'gamelibrary/search.html', context)

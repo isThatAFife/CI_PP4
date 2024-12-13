@@ -74,9 +74,13 @@
                     {% endif %}
 
                 </ul>
-                <span class="navbar-text text-muted">
+                <span class="navbar-text text-muted pe-3">
                     The ultimate game library!
                 </span>
+                <form action="{% url 'search' %}" method="get">
+                    <input type="text" name="q" placeholder="Search...">
+                    <button type="submit">Search</button>
+                </form>                
             </div>
         </div>
     </nav>
