@@ -3,8 +3,9 @@
 from django.db import migrations
 from django.utils.text import slugify
 
+
 def populate_slugs(apps, schema_editor):
-    Game = apps.get_model('gamelibrary', 'Game')
+    Game = apps.get_model("gamelibrary", "Game")
     for game in Game.objects.all():
         if not game.slug:
             base_slug = slugify(f"{game.name} {game.console}")
@@ -16,10 +17,11 @@ def populate_slugs(apps, schema_editor):
             game.slug = slug
             game.save()
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('gamelibrary', '0003_game_slug'),
+        ("gamelibrary", "0003_game_slug"),
     ]
 
     operations = [
