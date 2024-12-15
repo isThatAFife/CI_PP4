@@ -8,7 +8,8 @@
 <div class="comment">
     <p>{{ comment.body }}</p>
     <p>Posted on: {{ comment.created_on }}</p>
-    <p>On post: <a href="{% url 'game_detail' slug=comment.post.slug %}">{{ comment.post.name }}</a>
+    <p>On post: <a href="{% url 'game_detail' slug=comment.post.slug %}" aria="link to game page">{{ comment.post.name }}</a>
+    </div>
 {% endfor %}
 {% else %}
 <p>You haven't made any comments yet.</p>

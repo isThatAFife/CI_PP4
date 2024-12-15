@@ -81,6 +81,7 @@ class GameList(generic.ListView):
     and displays them in a paginated list. It also fetches cover images for games
     that don't have one stored locally.
     """
+
     queryset = Game.objects.all().order_by("-metascore")
     template_name = "gamelibrary/index.html"
     paginate_by = 6
@@ -174,7 +175,23 @@ def game_detail(request, slug):
 
 def comment_edit(request, slug, comment_id):
     """
-    view to edit comments
+    Edit an existing comment on a game post.
+
+    This view handles both GET and POST requests. For POST requests, it updates
+    the comment if the form is valid and the user is the author of the comment.
+    The comment's approval status is reset to False after editing.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        slug (str): The slug of the game post.
+        comment_id (int): The ID of the comment to be edited.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the game detail page after processing.
+
+    Messages:
+        SUCCESS: If the comment is successfully updated.
+        ERROR: If there's an error updating the comment.
     """
     if request.method == "POST":
 
@@ -188,15 +205,31 @@ def comment_edit(request, slug, comment_id):
             comment.post = post
             comment.approved = False
             comment.save()
-            messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
+            messages.add_message(request, messages.SUCCESS, "Comment Updated!")
         else:
-            messages.add_message(request, messages.ERROR, 'Error updating comment!')
+            messages.add_message(request, messages.ERROR, "Error updating comment!")
 
-    return HttpResponseRedirect(reverse('game_detail', args=[slug]))
+    return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+
 
 def comment_delete(request, slug, comment_id):
     """
-    view to delete comment
+    Delete a comment from a game post.
+
+    This view allows a user to delete their own comment. It checks if the
+    current user is the author of the comment before allowing deletion.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        slug (str): The slug of the game post.
+        comment_id (int): The ID of the comment to be deleted.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the game detail page after processing.
+
+    Messages:
+        SUCCESS: If the comment is successfully deleted.
+        ERROR: If the user tries to delete a comment they don't own.
     """
     queryset = Game.objects.all()
     post = get_object_or_404(queryset, slug=slug)
@@ -204,31 +237,51 @@ def comment_delete(request, slug, comment_id):
 
     if comment.author == request.user:
         comment.delete()
-        messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
+        messages.add_message(request, messages.SUCCESS, "Comment deleted!")
     else:
-        messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
+        messages.add_message(
+            request, messages.ERROR, "You can only delete your own comments!"
+        )
 
-    return HttpResponseRedirect(reverse('game_detail', args=[slug]))
+    return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+
 
 def search_view(request):
-    query = request.GET.get('q', '')
+    """
+    Search for games and comments based on a query string.
+
+    This view handles search functionality across games and comments. It filters
+    games by name, console, and date, and comments by body and author username.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing the search query.
+
+    Returns:
+        HttpResponse: Renders the search results page with the context containing
+                      the query, matching games, and matching comments.
+
+    Context:
+        query (str): The search query string.
+        games (QuerySet): A queryset of Game objects matching the search criteria.
+        comments (QuerySet): A queryset of Comment objects matching the search criteria.
+    """
+    query = request.GET.get("q", "")
     if query:
         games = Game.objects.filter(
-            Q(name__icontains=query) | 
-            Q(console__icontains=query) |
-            Q(date__icontains=query)
+            Q(name__icontains=query)
+            | Q(console__icontains=query)
+            | Q(date__icontains=query)
         )
         comments = Comment.objects.filter(
-            Q(body__icontains=query) |
-            Q(author__username__icontains=query)
+            Q(body__icontains=query) | Q(author__username__icontains=query)
         )
     else:
         games = Game.objects.none()
         comments = Comment.objects.none()
-    
+
     context = {
-        'query': query,
-        'games': games,
-        'comments': comments,
+        "query": query,
+        "games": games,
+        "comments": comments,
     }
-    return render(request, 'gamelibrary/search.html', context)
+    return render(request, "gamelibrary/search.html", context)

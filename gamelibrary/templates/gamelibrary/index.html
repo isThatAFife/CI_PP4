@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<!-- index.html content starts here -->
+
 <div class="container-fluid">
     <div class="row">
 
@@ -18,8 +18,8 @@
                                 {% if game.cover_url %}
                                 <img src="{{ game.cover_url }}" alt="{{ game.title }} cover">
                                 {% else %}
-                <img src="{% static 'images/default.webp' %}" class="game-cover" alt="{{ game.title }} default cover">
-            {% endif %}
+                                <img src="{% static 'images/default.webp' %}" class="game-cover" alt="{{ game.title }} default cover">
+                                {% endif %}
                                 <div class="image-flash">
                                     <p class="author">{{ game.console }}</p>
                                 </div>
@@ -59,7 +59,6 @@
     {% endif %}
 </div>
 
-<!-- index.html content ends here -->
 {% endblock %}
 
 {% block copyright %}
