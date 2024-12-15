@@ -18,13 +18,15 @@
                                 {% if game.cover_url %}
                                 <img src="{{ game.cover_url }}" alt="{{ game.title }} cover">
                                 {% else %}
-                                <img src="{% static 'images/default.webp' %}" class="game-cover" alt="{{ game.title }} default cover">
+                                <img src="{% static 'images/default.webp' %}" class="game-cover"
+                                    alt="{{ game.title }} default cover">
                                 {% endif %}
                                 <div class="image-flash">
                                     <p class="author">{{ game.console }}</p>
                                 </div>
                             </div>
-                            <a href="{% url 'game_detail' game.slug %}" class="post-link">
+                            <a href="{% url 'game_detail' game.slug %}" class="post-link"
+                                aria-label="View details for {{ game.name }}">
                                 <h2 class="card-title">{{ game.name }}</h2>
                             </a>
 
@@ -48,11 +50,15 @@
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li>
-                <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="page-link"
+                    aria-label="Go to previous page">&laquo; PREV</a>
             </li>
             {% endif %}
             {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT &raquo;</a></li>
+            <li>
+                <a href="?page={{ page_obj.next_page_number }}" class="page-link" aria-label="Go to next page"> NEXT
+                    &raquo;</a>
+            </li>
             {% endif %}
         </ul>
     </nav>

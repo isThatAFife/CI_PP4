@@ -5,35 +5,36 @@
 <h2>Search Results for "{{ query }}"</h2>
 
 {% if games or comments %}
-    <h3>Games</h3>
-    {% if games %}
-        <ul>
-        {% for game in games %}
-            <li>
-                <a href="{% url 'game_detail' slug=game.slug %}">
-                    {{ game.name }} ({{ game.console }}, {{ game.date }})
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No games found.</p>
-    {% endif %}
-
-    <h3>Comments</h3>
-    {% if comments %}
-        <ul>
-        {% for comment in comments %}
-            <li>
-                "{{ comment.body|truncatewords:20 }}" - {{ comment.author }} 
-                on <a href="{% url 'game_detail' slug=comment.post.slug %}">{{ comment.post.name }}</a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No comments found.</p>
-    {% endif %}
+<h3>Games</h3>
+{% if games %}
+<ul>
+    {% for game in games %}
+    <li>
+        <a href="{% url 'game_detail' slug=game.slug %}" aria-label="View details for {{ game.name }}">
+            {{ game.name }} ({{ game.console }}, {{ game.date }})
+        </a>
+    </li>
+    {% endfor %}
+</ul>
 {% else %}
-    <p>No results found.</p>
+<p>No games found.</p>
+{% endif %}
+
+<h3>Comments</h3>
+{% if comments %}
+<ul>
+    {% for comment in comments %}
+    <li>
+        "{{ comment.body|truncatewords:20 }}" - {{ comment.author }}
+        on <a href="{% url 'game_detail' slug=comment.post.slug %}"
+            aria-label="View game details for {{ comment.post.name }}">{{ comment.post.name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No comments found.</p>
+{% endif %}
+{% else %}
+<p>No results found.</p>
 {% endif %}
 {% endblock %}
