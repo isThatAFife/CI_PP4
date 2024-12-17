@@ -69,10 +69,10 @@
                     </p>
                     {% endif %}
                     {% if user.is_authenticated and comment.author == user %}
-                    <button class="btn btn-delete" comment_id="{{ comment.id }}"
-                        aria-label="Delete comment">Delete</button>
-                    <button class="btn btn-edit" comment_id="{{ comment.id }}" aria-label="Edit comment">Edit</button>
-                    {% endif %}
+                    <a href="{% url 'comment_edit' game.slug comment.id %}" class="btn btn-edit" aria-label="Edit comment">Edit</a>
+                    <button class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-comment-id="{{ comment.id }}" aria-label="Delete comment">Delete</button>
+                {% endif %}
+                
                 </div>
                 {% endfor %}
             </div>

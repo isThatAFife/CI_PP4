@@ -14,7 +14,7 @@ class Game(models.Model):
     name = models.CharField(max_length=200, unique=False, null=False)
     metascore = models.IntegerField(default=0)
     console = models.CharField(max_length=200, default="NA")
-    userscore = models.DecimalField(max_digits=2, decimal_places=2)
+    userscore = models.DecimalField(max_digits=3, decimal_places=2)
     date = models.CharField(max_length=100, default="1998")
     slug = models.SlugField(max_length=250, blank=True, unique=True)
     cover_url = models.URLField(blank=True, null=True)

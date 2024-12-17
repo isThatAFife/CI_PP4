@@ -85,53 +85,6 @@ class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
         return self.success_url  # Redirect to homepage after deletion
 
 
-# IGDB API Views
-
-
-def get_igdb_access_token(client_id, client_secret):
-    """
-    Obtain an access token from the IGDB API.
-
-    Args:
-        client_id (str): The IGDB client ID.
-        client_secret (str): The IGDB client secret.
-
-    Returns:
-        str: The access token for IGDB API requests.
-    """
-    url = "https://id.twitch.tv/oauth2/token"
-    params = {
-        "client_id": client_id,
-        "client_secret": client_secret,
-        "grant_type": "client_credentials",
-    }
-    response = requests.post(url, params=params)
-    return response.json()["access_token"]
-
-
-def igdb_request(endpoint, query, access_token, client_id):
-    """
-    Make a request to the IGDB API.
-
-    Args:
-        endpoint (str): The IGDB API endpoint.
-        query (str): The query string for the API request.
-        access_token (str): The IGDB API access token.
-        client_id (str): The IGDB client ID.
-
-    Returns:
-        dict: The JSON response from the IGDB API.
-    """
-    url = f"https://api.igdb.com/v4/{endpoint}"
-    headers = {
-        "Client-ID": client_id,
-        "Authorization": f"Bearer {access_token}",
-        "Accept": "application/json",
-    }
-    response = requests.post(url, headers=headers, data=query)
-    return response.json()
-
-
 # View for full list of games
 
 
@@ -359,3 +312,49 @@ def search_view(request):
         "comments": comments,
     }
     return render(request, "gamelibrary/search.html", context)
+
+# IGDB API Views
+
+
+def get_igdb_access_token(client_id, client_secret):
+    """
+    Obtain an access token from the IGDB API.
+
+    Args:
+        client_id (str): The IGDB client ID.
+        client_secret (str): The IGDB client secret.
+
+    Returns:
+        str: The access token for IGDB API requests.
+    """
+    url = "https://id.twitch.tv/oauth2/token"
+    params = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "grant_type": "client_credentials",
+    }
+    response = requests.post(url, params=params)
+    return response.json()["access_token"]
+
+
+def igdb_request(endpoint, query, access_token, client_id):
+    """
+    Make a request to the IGDB API.
+
+    Args:
+        endpoint (str): The IGDB API endpoint.
+        query (str): The query string for the API request.
+        access_token (str): The IGDB API access token.
+        client_id (str): The IGDB client ID.
+
+    Returns:
+        dict: The JSON response from the IGDB API.
+    """
+    url = f"https://api.igdb.com/v4/{endpoint}"
+    headers = {
+        "Client-ID": client_id,
+        "Authorization": f"Bearer {access_token}",
+        "Accept": "application/json",
+    }
+    response = requests.post(url, headers=headers, data=query)
+    return response.json()
