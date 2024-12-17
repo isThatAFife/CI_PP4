@@ -17,9 +17,7 @@ urlpatterns = [
         views.comment_delete,
         name="comment_delete",
     ),
-    path('game/new/', views.GameCreateView.as_view(), name='game_create'),
-    path('game/<slug:slug>/edit/',
-        views.GameUpdateView.as_view(), name='game_update'),
-    path('game/<slug:slug>/delete/', GameDeleteView.as_view(), name='game_delete'),
-
+    path("game/new/", views.GameCreateView.as_view(), name="game_create"),
+    path("game/<slug:slug>/edit/", views.GameUpdateView.as_view(), name="game_update"),
+    path("game/<slug:slug>/delete/", GameDeleteView.as_view(), name="game_delete"),
 ]

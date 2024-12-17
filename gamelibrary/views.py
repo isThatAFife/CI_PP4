@@ -33,6 +33,7 @@ def user_comments(request):
         request, "gamelibrary/user_comments.html", {"comments": user_comments}
     )
 
+
 # Class-based views for superuser CRUD
 
 
@@ -44,8 +45,8 @@ class AdminRequiredMixin(UserPassesTestMixin):
 class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Game
     form_class = GameForm
-    template_name = 'gamelibrary/game_form.html'
-    success_url = reverse_lazy('home')  # Redirect to homepage after creation
+    template_name = "gamelibrary/game_form.html"
+    success_url = reverse_lazy("home")  # Redirect to homepage after creation
 
     def form_valid(self, form):
         messages.success(self.request, "Game created successfully.")
@@ -55,23 +56,24 @@ class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Game
     form_class = GameForm
-    template_name = 'gamelibrary/game_form.html'
-    success_url = reverse_lazy('home')  # Redirect to homepage after update
+    template_name = "gamelibrary/game_form.html"
+    success_url = reverse_lazy("home")  # Redirect to homepage after update
 
     def form_valid(self, form):
         messages.success(self.request, "Game updated successfully.")
         return super().form_valid(form)
 
+
 class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Game
-    success_url = reverse_lazy('home')  # Default redirect URL
+    success_url = reverse_lazy("home")  # Default redirect URL
 
     def form_valid(self, form):
         print("game delete method called")
         # Custom deletion logic here
         game_name = self.object.name  # Store game name for messaging
         print("Deleting game:", game_name)  # Optional: Log the deletion
-        
+
         # Call the superclass method to perform the actual deletion
         response = super().form_valid(form)
 
@@ -129,6 +131,7 @@ def igdb_request(endpoint, query, access_token, client_id):
     response = requests.post(url, headers=headers, data=query)
     return response.json()
 
+
 # View for full list of games
 
 
@@ -153,7 +156,7 @@ class GameList(generic.ListView):
         a cover URL stored locally.
         """
         context = super().get_context_data(**kwargs)
-        context['is_admin'] = self.request.user.is_superuser
+        context["is_admin"] = self.request.user.is_superuser
         games = context["object_list"]
 
         client_id = settings.IGDB_CLIENT_ID
@@ -163,16 +166,15 @@ class GameList(generic.ListView):
         for game in games:
             if not game.cover_url:
                 query = f'fields name,cover.url; where name ~ "{game.name}";'
-                igdb_games = igdb_request(
-                    "games", query, access_token, client_id)
+                igdb_games = igdb_request("games", query, access_token, client_id)
                 if igdb_games and "cover" in igdb_games[0]:
                     cover_url = igdb_games[0]["cover"]["url"]
-                    high_quality_url = cover_url.replace(
-                        "t_thumb", "t_cover_big")
+                    high_quality_url = cover_url.replace("t_thumb", "t_cover_big")
                     game.cover_url = high_quality_url
                     game.save()
 
         return context
+
 
 # View for game detail page
 
@@ -227,13 +229,14 @@ def game_detail(request, slug):
         game.save()
 
     context = {
-        'game': game,
-        'comments': comments,
-        'comment_count': comment_count,
-        'comment_form': comment_form,
-        'is_admin': request.user.is_superuser,
+        "game": game,
+        "comments": comments,
+        "comment_count": comment_count,
+        "comment_form": comment_form,
+        "is_admin": request.user.is_superuser,
     }
-    return render(request, 'gamelibrary/game_detail.html', context)
+    return render(request, "gamelibrary/game_detail.html", context)
+
 
 # View to edit comments
 
@@ -272,10 +275,10 @@ def comment_edit(request, slug, comment_id):
             comment.save()
             messages.add_message(request, messages.SUCCESS, "Comment Updated!")
         else:
-            messages.add_message(request, messages.ERROR,
-                                 "Error updating comment!")
+            messages.add_message(request, messages.ERROR, "Error updating comment!")
 
     return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+
 
 # View to delete comments
 
@@ -313,6 +316,7 @@ def comment_delete(request, slug, comment_id):
 
     return HttpResponseRedirect(reverse("game_detail", args=[slug]))
 
+
 # View for search function
 
 
@@ -328,7 +332,7 @@ def search_view(request):
 
     Returns:
         HttpResponse: Renders the search results page with the context containing
-                      the query, matching games, and matching comments.
+                    the query, matching games, and matching comments.
 
     Context:
         query (str): The search query string.
