@@ -7,8 +7,8 @@
 <div class="container-fluid">
     <div class="row">
         {% if is_admin %}
-    <a href="{% url 'game_create' %}" class="btn btn-primary">Add New Game</a>
-{% endif %}
+        <a href="{% url 'game_create' %}" class="btn btn-primary">Add New Game</a>
+        {% endif %}
 
         <!-- Game Entries Column -->
         <div class="col-16 mt-3 left">
@@ -17,6 +17,10 @@
                 <div class="col-md-3 px-2">
                     <div class="card mb-4">
                         <div class="card-body">
+                            {% if is_admin %}
+                            <a href="{% url 'game_update' game.slug %}" class="btn btn-secondary">Edit</a>
+                            <a href="{% url 'game_delete' game.slug %}" class="btn btn-danger">Delete</a>
+                            {% endif %}
                             <div class="image-container">
                                 {% if game.cover_url %}
                                 <img src="{{ game.cover_url }}" alt="{{ game.title }} cover">
@@ -32,21 +36,14 @@
                                 aria-label="View details for {{ game.name }}">
                                 <h2 class="card-title">{{ game.name }}</h2>
                             </a>
-
                             <hr />
                             <p class="card-text text-muted h6">Metascore: {{ game.metascore }}
                             </p>
                         </div>
-                        {% if is_admin %}
-        <a href="{% url 'game_update' game.slug %}" class="btn btn-secondary">Edit</a>
-        <a href="{% url 'game_delete' game.slug %}" class="btn btn-danger">Delete</a>
-    {% endif %}
                     </div>
-                    
                 </div>
                 {% if forloop.counter|divisibleby:4 %}
             </div>
-            
             <div class="row">
                 {% endif %}
                 {% endfor %}

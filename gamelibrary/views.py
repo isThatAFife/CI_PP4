@@ -194,16 +194,14 @@ def game_detail(request, slug):
         game.cover_url = high_quality_url
         game.save()
 
-    return render(
-        request,
-        "gamelibrary/game_detail.html",
-        {
-            "game": game,
-            "comments": comments,
-            "comment_count": comment_count,
-            "comment_form": comment_form,
-        },
-    )
+    context = {
+        'game': game,
+        'comments': comments,
+        'comment_count': comment_count,
+        'comment_form': comment_form,
+        'is_admin': request.user.is_superuser,
+    }
+    return render(request, 'gamelibrary/game_detail.html', context)
 
 # View to edit comments
 

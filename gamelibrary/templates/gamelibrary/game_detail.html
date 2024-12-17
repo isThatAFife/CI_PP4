@@ -19,6 +19,10 @@
 </div>
 
 <div class="container">
+    {% if is_admin %}
+    <a href="{% url 'game_update' game.slug %}" class="btn btn-secondary">Edit Game</a>
+    <a href="{% url 'game_delete' game.slug %}" class="btn btn-danger">Delete Game</a>
+{% endif %}
     <div class="row">
         <div class="col card mb-4  mt-3 left  top">
             <div class="card-body">
