@@ -9,6 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.db.models import Q
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.urls import reverse_lazy
+
+# View for all user comments
 
 
 @login_required
@@ -27,6 +32,30 @@ def user_comments(request):
     return render(
         request, "gamelibrary/user_comments.html", {"comments": user_comments}
     )
+    
+# Class-based views for superuser CRUD
+class AdminRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
+    model = Game
+    fields = ['name', 'metascore', 'console', 'userscore', 'date', 'cover_url']
+    template_name = 'gamelibrary/game_form.html'
+    success_url = reverse_lazy('game_list')
+
+class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
+    model = Game
+    fields = ['name', 'metascore', 'console', 'userscore', 'date', 'cover_url']
+    template_name = 'gamelibrary/game_form.html'
+    success_url = reverse_lazy('game_list')
+
+class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
+    model = Game
+    template_name = 'gamelibrary/game_confirm_delete.html'
+    success_url = reverse_lazy('game_list')
+
+# IGDB API Views
 
 
 def get_igdb_access_token(client_id, client_secret):
@@ -72,6 +101,7 @@ def igdb_request(endpoint, query, access_token, client_id):
     response = requests.post(url, headers=headers, data=query)
     return response.json()
 
+# View for full list of games
 
 class GameList(generic.ListView):
     """
@@ -111,6 +141,8 @@ class GameList(generic.ListView):
                     game.save()
 
         return context
+
+# View for game detail page
 
 
 def game_detail(request, slug):
@@ -172,6 +204,8 @@ def game_detail(request, slug):
         },
     )
 
+# View to edit comments
+
 
 def comment_edit(request, slug, comment_id):
     """
@@ -211,6 +245,8 @@ def comment_edit(request, slug, comment_id):
 
     return HttpResponseRedirect(reverse("game_detail", args=[slug]))
 
+# View to delete comments
+
 
 def comment_delete(request, slug, comment_id):
     """
@@ -244,6 +280,8 @@ def comment_delete(request, slug, comment_id):
         )
 
     return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+
+# View for search function
 
 
 def search_view(request):
