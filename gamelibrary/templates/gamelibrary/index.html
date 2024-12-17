@@ -37,10 +37,16 @@
                             <p class="card-text text-muted h6">Metascore: {{ game.metascore }}
                             </p>
                         </div>
+                        {% if is_admin %}
+        <a href="{% url 'game_update' game.slug %}" class="btn btn-secondary">Edit</a>
+        <a href="{% url 'game_delete' game.slug %}" class="btn btn-danger">Delete</a>
+    {% endif %}
                     </div>
+                    
                 </div>
                 {% if forloop.counter|divisibleby:4 %}
             </div>
+            
             <div class="row">
                 {% endif %}
                 {% endfor %}
