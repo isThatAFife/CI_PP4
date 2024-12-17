@@ -3,7 +3,7 @@ from django.views import generic
 from django.conf import settings
 from django.contrib import messages
 from .models import Game, Comment
-from .forms import CommentForm
+from .forms import CommentForm, GameForm
 import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -40,13 +40,13 @@ class AdminRequiredMixin(UserPassesTestMixin):
 
 class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Game
-    fields = ['name', 'metascore', 'console', 'userscore', 'date', 'cover_url']
+    form_class = GameForm
     template_name = 'gamelibrary/game_form.html'
     success_url = reverse_lazy('game_list')
 
 class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Game
-    fields = ['name', 'metascore', 'console', 'userscore', 'date', 'cover_url']
+    form_class = GameForm
     template_name = 'gamelibrary/game_form.html'
     success_url = reverse_lazy('game_list')
 
