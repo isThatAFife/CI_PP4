@@ -1,7 +1,9 @@
+/* Set the background color for the entire body */
 body {
     background-color: #F9FAFC;
 }
 
+/* Style for logo */
 .brand {
     font-family: Lato, sans-serif;
     font-size: 1.4rem;
@@ -9,14 +11,12 @@ body {
     color: #4A4A4F;
 }
 
-.red-o {
-    color: #E84610;
-}
-
+/* Define a class for thin font weight */
 .thin {
     font-weight: 300;
 }
 
+/* Define background colors for different sections */
 .light-bg {
     background-color: #fff;
 }
@@ -29,15 +29,23 @@ body {
     background-color: #F9FAFC;
 }
 
+/* Remove border and set transparent background for cards */
 .card {
     border: none;
     background-color: transparent;
 }
 
+/* Set up container for images */
 .image-container {
     position: relative;
 }
 
+.image-container img {
+    max-width: 100%;
+    height: auto;
+  }
+
+/* Style for flash overlay on images */
 .image-flash {
     position: absolute;
     bottom: 5%;
@@ -46,17 +54,20 @@ body {
     background-color: #188181;
 }
 
+/* Ensure images scale properly */
 .scale {
     width: 100%;
     height: auto;
 }
 
+/* Style for author name */
 .author {
     color: white;
     margin: 4px;
     text-transform: uppercase;
 }
 
+/* Styling for the masthead section */
 .masthead {
     margin-top: 10px;
     overflow: hidden;
@@ -77,6 +88,7 @@ body {
     overflow: hidden;
 }
 
+/* Create a skewed overlay effect for the masthead image */
 .masthead-image:after {
     content: "";
     position: absolute;
@@ -91,6 +103,7 @@ body {
     z-index: 100;
 }
 
+/* Styling for post links */
 .post-link {
     text-decoration: none;
     color: #445261;
@@ -101,6 +114,7 @@ body {
     color: #E84610;
 }
 
+/* Positioning for post title and subtitle */
 .post-title {
     margin-top: 10%;
     margin-left: 5%;
@@ -111,6 +125,7 @@ body {
     color: lightgray;
 }
 
+/* Styling for signup and edit buttons */
 .btn-signup,
 .btn-edit {
     background-color: #188181;
@@ -123,6 +138,7 @@ body {
     color: #23BBBB;
 }
 
+/* Styling for links */
 .link {
     color: #23BBBB;
     text-decoration: none;
@@ -134,12 +150,14 @@ body {
     text-decoration: underline;
 }
 
+/* Styling for like button */
 .btn-like {
     color: #E84610;
     border: none;
     background: transparent;
 }
 
+/* Styling for delete button */
 .btn-delete {
     color: #fff;
     background: #E84610;
@@ -152,16 +170,17 @@ body {
     border: none;
 }
 
+/* Styling for faded text */
 .faded {
     color: rgb(172, 175, 175);
 }
 
+/* Styling for approval text */
 .approval {
     color: rgb(222, 146, 168);
 }
 
-/* cover art */
-
+/* Styling for default game cover art */
 .game-cover {
     width: 264px;
     height: 352px;

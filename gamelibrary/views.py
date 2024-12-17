@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.conf import settings
 from django.contrib import messages
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.db.models import Q
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 
@@ -32,28 +32,56 @@ def user_comments(request):
     return render(
         request, "gamelibrary/user_comments.html", {"comments": user_comments}
     )
-    
+
 # Class-based views for superuser CRUD
+
+
 class AdminRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
+
 
 class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Game
     form_class = GameForm
     template_name = 'gamelibrary/game_form.html'
-    success_url = reverse_lazy('game_list')
+    success_url = reverse_lazy('home')  # Redirect to homepage after creation
+
+    def form_valid(self, form):
+        messages.success(self.request, "Game created successfully.")
+        return super().form_valid(form)
+
 
 class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Game
     form_class = GameForm
     template_name = 'gamelibrary/game_form.html'
-    success_url = reverse_lazy('game_list')
+    success_url = reverse_lazy('home')  # Redirect to homepage after update
+
+    def form_valid(self, form):
+        messages.success(self.request, "Game updated successfully.")
+        return super().form_valid(form)
 
 class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Game
-    template_name = 'gamelibrary/game_confirm_delete.html'
-    success_url = reverse_lazy('game_list')
+    success_url = reverse_lazy('home')  # Default redirect URL
+
+    def form_valid(self, form):
+        print("game delete method called")
+        # Custom deletion logic here
+        game_name = self.object.name  # Store game name for messaging
+        print("Deleting game:", game_name)  # Optional: Log the deletion
+        
+        # Call the superclass method to perform the actual deletion
+        response = super().form_valid(form)
+
+        # After deletion, set a success message
+        messages.success(self.request, f"{game_name} has been deleted successfully.")
+        return response  # Return the response from the superclass
+
+    def get_success_url(self):
+        return self.success_url  # Redirect to homepage after deletion
+
 
 # IGDB API Views
 
@@ -103,6 +131,7 @@ def igdb_request(endpoint, query, access_token, client_id):
 
 # View for full list of games
 
+
 class GameList(generic.ListView):
     """
     A view to display a list of games.
@@ -134,10 +163,12 @@ class GameList(generic.ListView):
         for game in games:
             if not game.cover_url:
                 query = f'fields name,cover.url; where name ~ "{game.name}";'
-                igdb_games = igdb_request("games", query, access_token, client_id)
+                igdb_games = igdb_request(
+                    "games", query, access_token, client_id)
                 if igdb_games and "cover" in igdb_games[0]:
                     cover_url = igdb_games[0]["cover"]["url"]
-                    high_quality_url = cover_url.replace("t_thumb", "t_cover_big")
+                    high_quality_url = cover_url.replace(
+                        "t_thumb", "t_cover_big")
                     game.cover_url = high_quality_url
                     game.save()
 
@@ -147,6 +178,7 @@ class GameList(generic.ListView):
 
 
 def game_detail(request, slug):
+    print("Game detail view called")
     """
     Display details of a specific game and handle comment submissions.
 
@@ -240,7 +272,8 @@ def comment_edit(request, slug, comment_id):
             comment.save()
             messages.add_message(request, messages.SUCCESS, "Comment Updated!")
         else:
-            messages.add_message(request, messages.ERROR, "Error updating comment!")
+            messages.add_message(request, messages.ERROR,
+                                 "Error updating comment!")
 
     return HttpResponseRedirect(reverse("game_detail", args=[slug]))
 

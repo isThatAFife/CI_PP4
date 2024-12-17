@@ -18,8 +18,9 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             {% if is_admin %}
-                            <a href="{% url 'game_update' game.slug %}" class="btn btn-secondary">Edit</a>
-                            <a href="{% url 'game_delete' game.slug %}" class="btn btn-danger">Delete</a>
+                            <a href="{% url 'game_update' game.slug %}" class="btn btn-secondary">Edit Game</a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGameModal"
+                            data-game-slug="{{ game.slug }}">Delete Game</button>
                             {% endif %}
                             <div class="image-container">
                                 {% if game.cover_url %}
@@ -93,6 +94,10 @@
 
 
 {% endblock %}
+<!-- 
+{% block extras %}
+<script src="{% static 'js/gamedelete.js'}"></script>
+{% endblock %} -->
 
 {% block copyright %}
 Copyright 2024 Dylan K.

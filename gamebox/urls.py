@@ -11,3 +11,4 @@ urlpatterns = [
     path("search/", views.search_view, name="search"),
     path("<slug:slug>/", views.game_detail, name="game_detail"),
 ]
+
