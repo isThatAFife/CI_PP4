@@ -114,7 +114,7 @@ class GameList(generic.ListView):
 
     queryset = Game.objects.all().order_by("-metascore")
     template_name = "gamelibrary/index.html"
-    paginate_by = 6
+    paginate_by = 8
 
     def get_context_data(self, **kwargs):
         """
@@ -124,6 +124,7 @@ class GameList(generic.ListView):
         a cover URL stored locally.
         """
         context = super().get_context_data(**kwargs)
+        context['is_admin'] = self.request.user.is_superuser
         games = context["object_list"]
 
         client_id = settings.IGDB_CLIENT_ID

@@ -40,6 +40,11 @@ body {
     position: relative;
 }
 
+.image-container img {
+    max-width: 100%;
+    height: auto;
+  }
+
 /* Style for flash overlay on images */
 .image-flash {
     position: absolute;

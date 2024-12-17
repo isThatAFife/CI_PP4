@@ -6,12 +6,15 @@
 
 <div class="container-fluid">
     <div class="row">
+        {% if is_admin %}
+    <a href="{% url 'game_create' %}" class="btn btn-primary">Add New Game</a>
+{% endif %}
 
         <!-- Game Entries Column -->
-        <div class="col-12 mt-3 left">
+        <div class="col-16 mt-3 left">
             <div class="row">
                 {% for game in game_list %}
-                <div class="col-md-4">
+                <div class="col-md-3 px-2">
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="image-container">
@@ -36,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                {% if forloop.counter|divisibleby:3 %}
+                {% if forloop.counter|divisibleby:4 %}
             </div>
             <div class="row">
                 {% endif %}
