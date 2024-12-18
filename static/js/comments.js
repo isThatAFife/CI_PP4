@@ -21,25 +21,13 @@ const deleteConfirm = document.getElementById("deleteConfirm");
 // Add event listeners for all edit buttons
 for (let button of editButtons) {
     button.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent default link behavior
-
-        // Get the comment ID from the button's attribute
+        e.preventDefault();
         const commentId = e.target.getAttribute("comment_id");
-
-        // Get the comment content from the corresponding div
         const commentContent = document.getElementById(`comment${commentId}`).querySelector('div').innerText.trim();
-
-        // Populate the textarea with the existing comment content
         commentText.value = commentContent;
-
-        // Change the form action to point to the edit URL for this specific comment
         const editUrl = e.target.getAttribute("data-edit-url");
         commentForm.setAttribute("action", editUrl);
-
-        // Update the submit button text to "Update"
         submitButton.innerText = "Update";
-
-        // Scroll to the form for better UX
         commentForm.scrollIntoView({ behavior: "smooth" });
     });
 }
