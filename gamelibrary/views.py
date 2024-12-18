@@ -102,21 +102,17 @@ def game_detail(request, slug):
     comment_count = game.comments.filter(approved=True).count()
 
     if request.method == "POST":
-        # Check if this is a submission for a new comment
-        if 'submit_comment' in request.POST:  # Assuming you have a submit button named 'submit_comment'
-            comment_form = CommentForm(data=request.POST)
-            if comment_form.is_valid():
-                comment = comment_form.save(commit=False)
-                comment.author = request.user
-                comment.post = game
-                comment.save()
-                messages.add_message(request, messages.SUCCESS, "Comment submitted and awaiting approval")
-                
-                # Redirect to prevent resubmission on refresh
-                return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.post = game
+            comment.save()
+            messages.add_message(request, messages.SUCCESS, "Comment submitted and awaiting approval")
+            
+            return HttpResponseRedirect(reverse("game_detail", args=[slug]))
         else:
-            # Handle other POST requests (e.g., delete) here if necessary
-            pass
+            messages.add_message(request, messages.ERROR, "Comment failed to submit")
 
     # Reset form for GET requests or after successful submission
     comment_form = CommentForm()
