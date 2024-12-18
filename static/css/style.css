@@ -146,49 +146,49 @@ body {
 
 .link:hover,
 .link:active {
-   color:#8C2771;
-   text-decoration: underline;
+    color: #8C2771;
+    text-decoration: underline;
 }
 
 /* Styling for like button */
 .btn-like {
-   color:#BF349A;
-   border:none; 
-   background:none; 
+    color: #BF349A;
+    border: none;
+    background: none;
 }
 
 /* Styling for delete button */
 .btn-delete {
-   color:white; 
-   background-color:#BF349A;
+    color: white;
+    background-color: #BF349A;
 }
 
 .btn-like:hover,
 .btn-like:active {
-   color:#E7DCF2;
+    color: #E7DCF2;
 }
 
 /* Styling for faded text */
 .faded {
-   color:#524261;
+    color: #542280;
 }
 
 /* Styling for approval text */
 .approval {
-   color:#BF349A;
+    color: #BF349A;
 }
 
 /* Styling for default game cover art */
 .game-cover {
-   width:264px; 
-   height:auto; 
-   object-fit:center-cover; 
+    width: 264px;
+    height: auto;
+    object-fit: center-cover;
 }
 
 /* Comment border */
 .border-custom {
-   border-color:#E7DCF2;
-   border-radius:.25rem; 
+    border-color: #E7DCF2;
+    border-radius: .25rem;
 }
 
 /* Navbar custom coloring */
