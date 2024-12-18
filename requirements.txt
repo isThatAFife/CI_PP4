@@ -22,9 +22,11 @@ oauthlib==3.2.2
 packaging==24.2
 pathspec==0.12.1
 platformdirs==4.3.6
+postgres==4.0
 protobuf==5.29.1
 psycopg2==2.9.10
 psycopg2-binary==2.9.10
+psycopg2-pool==1.2
 pycparser==2.22
 PyJWT==2.10.1
 python3-openid==3.2.0
