@@ -1,6 +1,6 @@
 /* Set the background color for the entire body */
 body {
-    background-color: #F9FAFC;
+    background-color: #E7DCF2;
 }
 
 /* Style for logo */
@@ -8,7 +8,7 @@ body {
     font-family: Lato, sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
-    color: #4A4A4F;
+    color: #BF349A;
 }
 
 /* Define a class for thin font weight */
@@ -22,11 +22,11 @@ body {
 }
 
 .dark-bg {
-    background-color: #445261;
+    background-color: #8C2771;
 }
 
 .main-bg {
-    background-color: #F9FAFC;
+    background-color: #E7DCF2;
 }
 
 /* Remove border and set transparent background for cards */
@@ -43,7 +43,7 @@ body {
 .image-container img {
     max-width: 100%;
     height: auto;
-  }
+}
 
 /* Style for flash overlay on images */
 .image-flash {
@@ -51,7 +51,7 @@ body {
     bottom: 5%;
     min-width: 30%;
     left: -2px;
-    background-color: #188181;
+    background-color: #2ABFBF;
 }
 
 /* Ensure images scale properly */
@@ -62,7 +62,7 @@ body {
 
 /* Style for author name */
 .author {
-    color: white;
+    color: #BF349A;
     margin: 4px;
     text-transform: uppercase;
 }
@@ -78,7 +78,7 @@ body {
 }
 
 .masthead-text {
-    background-color: #445261;
+    background-color: #8C2771;
     color: white;
     position: relative;
 }
@@ -96,7 +96,7 @@ body {
     right: 90%;
     height: 100%;
     width: 150%;
-    background: #445261;
+    background: #8C2771;
     -webkit-transform: skew(15deg);
     -moz-transform: skew(15deg);
     transform: skew(15deg);
@@ -106,12 +106,12 @@ body {
 /* Styling for post links */
 .post-link {
     text-decoration: none;
-    color: #445261;
+    color: #8C2771;
 }
 
 .post-link:hover,
 .page-link {
-    color: #E84610;
+    color: #BF349A;
 }
 
 /* Positioning for post title and subtitle */
@@ -128,67 +128,71 @@ body {
 /* Styling for signup and edit buttons */
 .btn-signup,
 .btn-edit {
-    background-color: #188181;
-    color: #fff;
+    background-color: #29A6A6;
+    color: #E7DCF2;
 }
 
 .btn-signup:hover,
 .btn-signup:active {
-    background-color: #fff;
-    color: #23BBBB;
+    background-color: #E7DCF2;
+    color: #2ABFBF;
 }
 
 /* Styling for links */
 .link {
-    color: #23BBBB;
+    color: #2ABFBF;
     text-decoration: none;
 }
 
 .link:hover,
 .link:active {
-    color: #445261;
-    text-decoration: underline;
+   color:#8C2771;
+   text-decoration: underline;
 }
 
 /* Styling for like button */
 .btn-like {
-    color: #E84610;
-    border: none;
-    background: transparent;
+   color:#BF349A;
+   border:none; 
+   background:none; 
 }
 
 /* Styling for delete button */
 .btn-delete {
-    color: #fff;
-    background: #E84610;
+   color:white; 
+   background-color:#BF349A;
 }
 
 .btn-like:hover,
 .btn-like:active {
-    color: #E84610;
-    background: transparent;
-    border: none;
+   color:#E7DCF2;
 }
 
 /* Styling for faded text */
 .faded {
-    color: rgb(172, 175, 175);
+   color:#E7DCF2;
 }
 
 /* Styling for approval text */
 .approval {
-    color: rgb(222, 146, 168);
+   color:#BF349A;
 }
 
 /* Styling for default game cover art */
 .game-cover {
-    width: 264px;
-    height: 352px;
-    object-fit: cover;
+   width:264px; 
+   height:auto; 
+   object-fit:center-cover; 
 }
 
 /* Comment border */
 .border-custom {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 0.25rem;
+   border-color:#E7DCF2;
+   border-radius:.25rem; 
+}
+
+/* Navbar custom coloring */
+
+.navbar-color {
+    background: #2ABFBF;
 }
