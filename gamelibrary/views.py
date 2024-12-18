@@ -7,7 +7,7 @@ from .forms import CommentForm, GameForm
 import requests
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.db.models import Q
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
@@ -32,57 +32,6 @@ def user_comments(request):
     return render(
         request, "gamelibrary/user_comments.html", {"comments": user_comments}
     )
-
-
-# Class-based views for superuser CRUD
-
-
-class AdminRequiredMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_superuser
-
-
-class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
-    model = Game
-    form_class = GameForm
-    template_name = "gamelibrary/game_form.html"
-    success_url = reverse_lazy("home")  # Redirect to homepage after creation
-
-    def form_valid(self, form):
-        messages.success(self.request, "Game created successfully.")
-        return super().form_valid(form)
-
-
-class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
-    model = Game
-    form_class = GameForm
-    template_name = "gamelibrary/game_form.html"
-    success_url = reverse_lazy("home")  # Redirect to homepage after update
-
-    def form_valid(self, form):
-        messages.success(self.request, "Game updated successfully.")
-        return super().form_valid(form)
-
-
-class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
-    model = Game
-    success_url = reverse_lazy("home")  # Default redirect URL
-
-    def form_valid(self, form):
-        print("game delete method called")
-        # Custom deletion logic here
-        game_name = self.object.name  # Store game name for messaging
-        print("Deleting game:", game_name)  # Optional: Log the deletion
-
-        # Call the superclass method to perform the actual deletion
-        response = super().form_valid(form)
-
-        # After deletion, set a success message
-        messages.success(self.request, f"{game_name} has been deleted successfully.")
-        return response  # Return the response from the superclass
-
-    def get_success_url(self):
-        return self.success_url  # Redirect to homepage after deletion
 
 
 # View for full list of games
@@ -133,7 +82,6 @@ class GameList(generic.ListView):
 
 
 def game_detail(request, slug):
-    print("Game detail view called")
     """
     Display details of a specific game and handle comment submissions.
 
@@ -193,8 +141,9 @@ def game_detail(request, slug):
 
 # View to edit comments
 
-
+@login_required
 def comment_edit(request, slug, comment_id):
+    print("comment edit method called")
     """
     Edit an existing comment on a game post.
 
@@ -214,29 +163,46 @@ def comment_edit(request, slug, comment_id):
         SUCCESS: If the comment is successfully updated.
         ERROR: If there's an error updating the comment.
     """
+    queryset = Game.objects.all()
+    game = get_object_or_404(queryset, slug=slug)
+    comments = game.comments.all().order_by("-created_on")
+    comment_count = comments.filter(approved=True).count()
+
+    # Fetch the specific comment to edit
+    comment = get_object_or_404(Comment, pk=comment_id)
+
     if request.method == "POST":
-
-        queryset = Game.objects.all()
-        post = get_object_or_404(queryset, slug=slug)
-        comment = get_object_or_404(Comment, pk=comment_id)
+        # Handle form submission for editing
         comment_form = CommentForm(data=request.POST, instance=comment)
-
         if comment_form.is_valid() and comment.author == request.user:
-            comment = comment_form.save(commit=False)
-            comment.post = post
-            comment.approved = False
-            comment.save()
-            messages.add_message(request, messages.SUCCESS, "Comment Updated!")
+            updated_comment = comment_form.save(commit=False)
+            updated_comment.post = game
+            updated_comment.approved = False  # Reset approval after editing
+            updated_comment.save()
+            messages.success(request, "Comment updated successfully!")
         else:
-            messages.add_message(request, messages.ERROR, "Error updating comment!")
+            messages.error(request, "Error updating comment.")
 
-    return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+    else:
+        # Pre-fill form with existing comment data for editing
+        comment_form = CommentForm(instance=comment)
 
+    # Render the game detail page with updated context
+    context = {
+        "game": game,
+        "comments": comments,
+        "comment_count": comment_count,
+        "comment_form": comment_form,
+        "is_admin": request.user.is_superuser,
+        "editing_comment_id": comment_id,  # Pass the ID of the comment being edited
+    }
+    return render(request, "gamelibrary/game_detail.html", context)
 
 # View to delete comments
 
-
+@login_required
 def comment_delete(request, slug, comment_id):
+    print("comment delete method called")
     """
     Delete a comment from a game post.
 
@@ -255,19 +221,18 @@ def comment_delete(request, slug, comment_id):
         SUCCESS: If the comment is successfully deleted.
         ERROR: If the user tries to delete a comment they don't own.
     """
-    queryset = Game.objects.all()
-    post = get_object_or_404(queryset, slug=slug)
-    comment = get_object_or_404(Comment, pk=comment_id)
-
-    if comment.author == request.user:
-        comment.delete()
-        messages.add_message(request, messages.SUCCESS, "Comment deleted!")
-    else:
-        messages.add_message(
-            request, messages.ERROR, "You can only delete your own comments!"
-        )
-
-    return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        queryset = Game.objects.all()
+        post = get_object_or_404(queryset, slug=slug)
+        comment = get_object_or_404(Comment, pk=comment_id)
+        
+        if comment.author == request.user or request.user.is_superuser:
+            comment.delete()
+            return JsonResponse({"success": True, "message": "Comment deleted successfully"})
+        else:
+            return JsonResponse({"success": False, "message": "You can only delete your own comments"})
+    
+    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
 
 
 # View for search function
@@ -312,6 +277,55 @@ def search_view(request):
         "comments": comments,
     }
     return render(request, "gamelibrary/search.html", context)
+
+# Class-based views for superuser CRUD
+
+
+class AdminRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
+    model = Game
+    form_class = GameForm
+    template_name = "gamelibrary/game_form.html"
+    success_url = reverse_lazy("home")  # Redirect to homepage after creation
+
+    def form_valid(self, form):
+        messages.success(self.request, "Game created successfully.")
+        return super().form_valid(form)
+
+
+class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
+    model = Game
+    form_class = GameForm
+    template_name = "gamelibrary/game_form.html"
+    success_url = reverse_lazy("home")  # Redirect to homepage after update
+
+    def form_valid(self, form):
+        messages.success(self.request, "Game updated successfully.")
+        return super().form_valid(form)
+
+
+class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
+    model = Game
+    success_url = reverse_lazy("home")  # Default redirect URL
+
+    def form_valid(self, form):
+        print("game delete method called")
+        # Custom deletion logic here
+        game_name = self.object.name  # Store game name for messaging
+        
+        # Call the superclass method to perform the actual deletion
+        response = super().form_valid(form)
+
+        # After deletion, set a success message
+        messages.success(self.request, f"{game_name} has been deleted successfully.")
+        return response  # Return the response from the superclass
+
+    def get_success_url(self):
+        return self.success_url  # Redirect to homepage after deletion
 
 # IGDB API Views
 

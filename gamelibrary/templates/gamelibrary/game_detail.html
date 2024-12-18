@@ -21,7 +21,7 @@
 <div class="container">
     {% if is_admin %}
     <a href="{% url 'game_update' game.slug %}" class="btn btn-secondary">Edit Game</a>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGameModal">Delete Game</button>
+    <button type="button" class="btn btn-danger btn-delete-game" data-bs-toggle="modal" data-bs-target="#deleteGameModal">Delete Game</button>
     {% endif %}
     <div class="row">
         <div class="col card mb-4  mt-3 left  top">
@@ -48,46 +48,44 @@
     </div>
     <!-- Displaying Comments -->
     <div class="row">
-        <div class="col-md-8 card mb-4  mt-3 ">
+        <div class="col-md-8 card mb-4 mt-3">
             <h3>Comments:</h3>
             <div class="card-body">
                 {% for comment in comments %}
-                <div
+                <div id="comment{{ comment.id }}"
                     class="p-2 comments {% if not comment.approved and comment.author == user %} faded{% elif not comment.approved %} d-none{% endif %}">
                     <p class="font-weight-bold">
                         {{ comment.author }}
-                        <span class="font-weight-normal">
-                            {{ comment.created_on }}
-                        </span> wrote:
+                        <span class="font-weight-normal">{{ comment.created_on }}</span> wrote:
                     </p>
                     <div id="comment{{ comment.id }}">
                         {{ comment.body | linebreaks }}
                     </div>
                     {% if not comment.approved and comment.author == user %}
-                    <p class="approval">
-                        This comment is awaiting approval
-                    </p>
+                    <p class="approval">This comment is awaiting approval</p>
                     {% endif %}
                     {% if user.is_authenticated and comment.author == user %}
-                    <a href="{% url 'comment_edit' game.slug comment.id %}" class="btn btn-edit" aria-label="Edit comment">Edit</a>
-                    <button class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-comment-id="{{ comment.id }}" aria-label="Delete comment">Delete</button>
-                {% endif %}
-                
+                    <!-- Edit button -->
+                    <a href="#" class="btn btn-edit" aria-label="Edit comment" comment_id="{{ comment.id }}" data-edit-url="{% url 'comment_edit' game.slug comment.id %}">Edit</a>
+                    <!-- Delete button -->
+                    <button class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                    data-comment-id="{{ comment.id }}" data-game-slug="{{ game.slug }}" aria-label="Delete comment">Delete</button>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
         </div>
-        <!-- Creating New Comments -->
+    
+        <!-- Comment Form -->
         <div class="col-md-4 card mb-4 mt-3">
             <div class="card-body">
                 {% if user.is_authenticated %}
-                <h3>Leave a comment:</h3>
+                <h3>Leave a Comment:</h3>
                 <p>Posting as: {{ user.username }}</p>
-                <form id="commentForm" method="post" style="margin-top: 1.3em;">
+                <form id="commentForm" method="post" action="{% url 'game_detail' game.slug %}" style="margin-top: 1.3em;">
                     {{ comment_form | crispy }}
                     {% csrf_token %}
-                    <button id="submitButton" type="submit" class="btn btn-signup btn-lg"
-                        aria-label="Submit comment">Submit</button>
+                    <button id="submitButton" type="submit" class="btn btn-signup btn-lg">Submit</button>
                 </form>
                 {% else %}
                 <p>Log in to leave a comment</p>
@@ -95,7 +93,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <!-- Delete confirmation modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -112,7 +109,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                     aria-label="Close modal">Close</button>
-                <a id="deleteConfirm" href="#" class="btn btn-danger" aria-label="Confirm delete comment">Delete</a>
+                <a id="deleteConfirm" href="#" class="btn btn-danger" data-comment-id="{{ comment.id }}" aria-label="Confirm delete comment">Delete</a>
             </div>
         </div>
     </div>
@@ -142,9 +139,9 @@
     </div>
 </div>
 
+
 {% endblock content %}
 
 {% block extras %}
 <script src="{% static 'js/comments.js' %}"></script>
-<script src="{% static 'js/gamedelete.js' %}"></script>
 {% endblock %}
