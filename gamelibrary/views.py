@@ -68,10 +68,14 @@ class GameList(generic.ListView):
         for game in games:
             if not game.cover_url:
                 query = f'fields name,cover.url; where name ~ "{game.name}";'
-                igdb_games = igdb_request("games", query, access_token, client_id)
+                igdb_games = igdb_request(
+                    "games", query, access_token, client_id
+                )
                 if igdb_games and "cover" in igdb_games[0]:
                     cover_url = igdb_games[0]["cover"]["url"]
-                    high_quality_url = cover_url.replace("t_thumb", "t_cover_big")
+                    high_quality_url = cover_url.replace(
+                        "t_thumb", "t_cover_big"
+                    )
                     game.cover_url = high_quality_url
                     game.save()
 
@@ -109,12 +113,16 @@ def game_detail(request, slug):
             comment.post = game
             comment.save()
             messages.add_message(
-                request, messages.SUCCESS, "Comment submitted and awaiting approval"
+                request,
+                messages.SUCCESS,
+                "Comment submitted and awaiting approval",
             )
 
             return HttpResponseRedirect(reverse("game_detail", args=[slug]))
         else:
-            messages.add_message(request, messages.ERROR, "Comment failed to submit")
+            messages.add_message(
+                request, messages.ERROR, "Comment failed to submit"
+            )
 
     # Reset form for GET requests or after successful submission
     comment_form = CommentForm()
@@ -229,10 +237,15 @@ def comment_delete(request, slug, comment_id):
             )
         else:
             return JsonResponse(
-                {"success": False, "message": "You can only delete your own comments"}
+                {
+                    "success": False,
+                    "message": "You can only delete your own comments",
+                }
             )
 
-    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
+    return JsonResponse(
+        {"success": False, "message": "Invalid request"}, status=400
+    )
 
 
 # View for search function
@@ -286,9 +299,10 @@ class AdminRequiredMixin(UserPassesTestMixin):
     """
     Mixin that restricts access to views for superuser accounts only.
 
-    This mixin checks if the current user is a superuser. If not, access to the 
+    This mixin checks if the current user is a superuser. If not, access to the
     view will be denied.
     """
+
     def test_func(self):
         """
         Determine whether the current user has permission to access the view.
@@ -304,7 +318,7 @@ class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     View for creating a new game entry.
 
     This view requires the user to be logged in and to have admin privileges.
-    On successful form submission, it displays a success message and redirects 
+    On successful form submission, it displays a success message and redirects
     to the home page.
 
     Attributes:
@@ -313,6 +327,7 @@ class GameCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
         template_name: The template used to render the form.
         success_url: The URL to redirect to on successful form submission.
     """
+
     model = Game
     form_class = GameForm
     template_name = "gamelibrary/game_form.html"
@@ -339,7 +354,7 @@ class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     View for updating an existing game entry.
 
     This view requires the user to be logged in and to have admin privileges.
-    On successful form submission, it displays a success message and redirects 
+    On successful form submission, it displays a success message and redirects
     to the home page.
 
     Attributes:
@@ -348,6 +363,7 @@ class GameUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
         template_name: The template used to render the form.
         success_url: The URL to redirect to on successful form submission.
     """
+
     model = Game
     form_class = GameForm
     template_name = "gamelibrary/game_form.html"
@@ -374,13 +390,14 @@ class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     View for deleting an existing game entry.
 
     This view requires the user to be logged in and to have admin privileges.
-    On successful deletion, it displays a success message and redirects 
+    On successful deletion, it displays a success message and redirects
     to the home page.
 
     Attributes:
         model: The Game model associated with this view.
         success_url: The URL to redirect to on successful deletion.
     """
+
     model = Game
     success_url = reverse_lazy("home")
 
@@ -389,8 +406,8 @@ class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
         Handle valid deletion request.
 
         Prints a message indicating that the delete method was called,
-        retrieves the name of the game being deleted, displays a success 
-        message upon successful deletion, and calls the parent class's 
+        retrieves the name of the game being deleted, displays a success
+        message upon successful deletion, and calls the parent class's
         form_valid method.
 
         Args:
@@ -402,7 +419,11 @@ class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
         print("game delete method called")
         game_name = self.object.name
         response = super().form_valid(form)
-        messages.success(self.request, f"{game_name} has been deleted successfully.")
+        messages.success(
+            self.request,
+            f"{
+                        game_name} has been deleted successfully.",
+        )
         return response
 
     def get_success_url(self):
@@ -412,7 +433,7 @@ class GameDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
         Returns:
             str: The success URL defined for this view.
         """
-        return self.success_url 
+        return self.success_url
 
 
 # IGDB API Views

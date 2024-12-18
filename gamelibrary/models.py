@@ -27,7 +27,9 @@ class Game(models.Model):
         Custom validation to ensure metascore is within valid range.
         """
         if self.metascore < 0 or self.metascore > 100:
-            raise ValidationError({"metascore": "Metascore must be between 0 and 100."})
+            raise ValidationError(
+                {"metascore": "Metascore must be between 0 and 100."}
+            )
 
         # Validate userscore format (0.0 to 9.9)
         if not (0 <= self.userscore < 10):
@@ -65,8 +67,12 @@ class Comment(models.Model):
     including the comment body, approval status, and creation timestamp.
     """
 
-    post = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
+    post = models.ForeignKey(
+        Game, on_delete=models.CASCADE, related_name="comments"
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="commenter"
+    )
     body = models.TextField()
     approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)

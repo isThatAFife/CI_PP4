@@ -13,7 +13,14 @@ class CommentForm(forms.ModelForm):
 class GameForm(forms.ModelForm):
     class Meta:
         model = Game
-        fields = ["name", "metascore", "console", "userscore", "date", "cover_url"]
+        fields = [
+            "name",
+            "metascore",
+            "console",
+            "userscore",
+            "date",
+            "cover_url",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
