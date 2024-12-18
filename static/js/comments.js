@@ -66,7 +66,7 @@ for (let button of deleteButtons) {
 deleteConfirm.addEventListener("click", function(e) {
     e.preventDefault();
     const commentId = this.getAttribute("data-comment-id");
-    const gameSlug = this.getAttribute("data-game-slug");
+    const gameSlug = document.querySelector('.btn-delete[data-comment-id="' + commentId + '"]').getAttribute("data-game-slug");
     const deleteUrl = `/game/${gameSlug}/comment/${commentId}/delete/`;
     
     fetch(deleteUrl, {
@@ -84,13 +84,14 @@ deleteConfirm.addEventListener("click", function(e) {
         if (data.success) {
             location.reload();
         } else {
-            alert('Error deleting comment');
+            alert('Error deleting comment: ' + data.message);
         }
     }).catch(error => {
         console.error('Error:', error);
         alert('An error occurred while deleting the comment');
     });
 });
+
 
 
 
@@ -105,48 +106,48 @@ deleteConfirm.addEventListener("click", function(e) {
     * the user for confirmation before deletion.
     */
     // Event listener for delete confirmation
-    deleteGameConfirm.addEventListener("click", function (e) {
-        e.preventDefault();
-        console.log(deleteGameConfirm.href);
-        deleteGameConfirm.disabled = true; // Disable button to prevent multiple clicks
+deleteGameConfirm.addEventListener("click", function (e) {
+    e.preventDefault();
+    console.log(deleteGameConfirm.href);
+    deleteGameConfirm.disabled = true; // Disable button to prevent multiple clicks
 
-        fetch(this.href, {
-            method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFToken': getCookie('csrftoken')
-            }
-        }).then(response => {
-            if (!response.ok) {
-                return response.text().then(text => { throw new Error(text); });
-            }
-            return response.json();
-        }).then(data => {
-            if (data.status === 'success') {
-                window.location.href = data.url; // Redirect to game list after deletion
-            } else {
-                // Handle unexpected status
-                alert('Error deleting game: ' + data.message);
-            }
-        }).catch(error => {
-            console.error('There was a problem with your fetch operation:', error);
-            alert('An error occurred: ' + error.message); // Provide user feedback
-        }).finally(() => {
-            deleteGameConfirm.disabled = false; // Re-enable button after processing
-        });
+    fetch(this.href, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    }).then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text); });
+        }
+        return response.json();
+    }).then(data => {
+        if (data.status === 'success') {
+            window.location.href = data.url; // Redirect to game list after deletion
+        } else {
+            // Handle unexpected status
+            alert('Error deleting game: ' + data.message);
+        }
+    }).catch(error => {
+        console.error('There was a problem with your fetch operation:', error);
+        alert('An error occurred: ' + error.message); // Provide user feedback
+    }).finally(() => {
+        deleteGameConfirm.disabled = false; // Re-enable button after processing
     });
+});
 
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
-    };
+    }
+    return cookieValue;
+};

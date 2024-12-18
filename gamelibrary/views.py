@@ -221,17 +221,17 @@ def comment_delete(request, slug, comment_id):
         SUCCESS: If the comment is successfully deleted.
         ERROR: If the user tries to delete a comment they don't own.
     """
-    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        queryset = Game.objects.all()
-        post = get_object_or_404(queryset, slug=slug)
-        comment = get_object_or_404(Comment, pk=comment_id)
+    if request.method == "POST":
+            queryset = Game.objects.all()
+            post = get_object_or_404(queryset, slug=slug)
+            comment = get_object_or_404(Comment, pk=comment_id)
+            
+            if comment.author == request.user or request.user.is_superuser:
+                comment.delete()
+                return JsonResponse({"success": True, "message": "Comment deleted successfully"})
+            else:
+                return JsonResponse({"success": False, "message": "You can only delete your own comments"})
         
-        if comment.author == request.user or request.user.is_superuser:
-            comment.delete()
-            return JsonResponse({"success": True, "message": "Comment deleted successfully"})
-        else:
-            return JsonResponse({"success": False, "message": "You can only delete your own comments"})
-    
     return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
 
 
