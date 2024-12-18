@@ -186,3 +186,9 @@ body {
     height: 352px;
     object-fit: cover;
 }
+
+/* Comment border */
+.border-custom {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.25rem;
+}

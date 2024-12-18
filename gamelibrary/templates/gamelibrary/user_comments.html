@@ -1,15 +1,27 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
-<h2>My Comments</h2>
-{% if comments %} {% for comment in comments %}
-<div class="comment">
-    <p>{{ comment.body }}</p>
-    <p>Posted on: {{ comment.created_on }}</p>
-    <p>
-        On post:
-        <a href="{% url 'game_detail' slug=comment.post.slug %}" aria="link to game page">{{ comment.post.name }}</a>
-    </p>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">My Comments</h2>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="card mb-4 border-custom">
+                        <div class="card-body text-center">
+                            <p class="card-text">{{ comment.body }}</p>
+                            <p class="card-text"><small class="text-muted">Posted on: {{ comment.created_on }}</small></p>
+                            <p class="card-text">
+                                On post:
+                                <a href="{% url 'game_detail' slug=comment.post.slug %}" aria="link to game page">{{ comment.post.name }}</a>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">You haven't made any comments yet.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
-
-{% endfor %} {% else %}
-<p>You haven't made any comments yet.</p>
-{% endif %} {% endblock %}
+{% endblock %}

@@ -9,7 +9,6 @@ class GameAdmin(SummernoteModelAdmin):
     Admin class for the Game model.
     Customizes the admin interface with list display, search, filtering, and Summernote integration.
     """
-
     list_display = ("name", "console", "metascore", "date")
     search_fields = ["name"]
     list_filter = ("date", "metascore")
