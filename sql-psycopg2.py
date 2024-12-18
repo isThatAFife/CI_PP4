@@ -5,17 +5,19 @@ try:
     # Establishing the connection
     connection = psycopg2.connect(
         database="postgresql://neondb_owner:6viqIRPgmh8y@ep-tight-dew-a25ojf2o.eu-central-1.aws.neon.tech/keg_come_rut_654270",  # Replace with your database name
-        user="dylank",            # Replace with your username
-        password="C14ru5M3d1a",        # Replace with your password
-        host="localhost",                # Replace with your host (e.g., localhost)
-        port="5432"                      # Default PostgreSQL port
+        user="dylank",  # Replace with your username
+        password="C14ru5M3d1a",  # Replace with your password
+        host="localhost",  # Replace with your host (e.g., localhost)
+        port="5432",  # Default PostgreSQL port
     )
 
     # Creating a cursor object using the cursor() method
     cursor = connection.cursor()
 
     # Executing a SQL query
-    cursor.execute("SELECT * FROM gamelibrary_game WHERE metascore = 'tbd';")  # Replace with your table name
+    cursor.execute(
+        "SELECT * FROM gamelibrary_game WHERE metascore = 'tbd';"
+    )  # Replace with your table name
 
     # Fetching all results from the executed query
     records = cursor.fetchall()
