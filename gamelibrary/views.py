@@ -102,17 +102,23 @@ def game_detail(request, slug):
     comment_count = game.comments.filter(approved=True).count()
 
     if request.method == "POST":
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.author = request.user
-            comment.post = game
-            comment.save()
+        # Check if this is a submission for a new comment
+        if 'submit_comment' in request.POST:  # Assuming you have a submit button named 'submit_comment'
+            comment_form = CommentForm(data=request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.author = request.user
+                comment.post = game
+                comment.save()
+                messages.add_message(request, messages.SUCCESS, "Comment submitted and awaiting approval")
+                
+                # Redirect to prevent resubmission on refresh
+                return HttpResponseRedirect(reverse("game_detail", args=[slug]))
+        else:
+            # Handle other POST requests (e.g., delete) here if necessary
+            pass
 
-            messages.add_message(
-                request, messages.SUCCESS, "Comment submitted and awaiting approval"
-            )
-
+    # Reset form for GET requests or after successful submission
     comment_form = CommentForm()
 
     # Fetch cover from IGDB
@@ -164,37 +170,30 @@ def comment_edit(request, slug, comment_id):
         ERROR: If there's an error updating the comment.
     """
     queryset = Game.objects.all()
-    game = get_object_or_404(queryset, slug=slug)
-    comments = game.comments.all().order_by("-created_on")
-    comment_count = comments.filter(approved=True).count()
-
-    # Fetch the specific comment to edit
+    post = get_object_or_404(queryset, slug=slug)
     comment = get_object_or_404(Comment, pk=comment_id)
 
     if request.method == "POST":
-        # Handle form submission for editing
         comment_form = CommentForm(data=request.POST, instance=comment)
         if comment_form.is_valid() and comment.author == request.user:
             updated_comment = comment_form.save(commit=False)
-            updated_comment.post = game
+            updated_comment.post = post
             updated_comment.approved = False  # Reset approval after editing
             updated_comment.save()
             messages.success(request, "Comment updated successfully!")
-        else:
-            messages.error(request, "Error updating comment.")
+
+            # Redirect to prevent resubmission on refresh
+            return HttpResponseRedirect(reverse("game_detail", args=[slug]))
 
     else:
         # Pre-fill form with existing comment data for editing
         comment_form = CommentForm(instance=comment)
 
-    # Render the game detail page with updated context
     context = {
-        "game": game,
-        "comments": comments,
-        "comment_count": comment_count,
+        "game": post,
         "comment_form": comment_form,
         "is_admin": request.user.is_superuser,
-        "editing_comment_id": comment_id,  # Pass the ID of the comment being edited
+        "editing_comment_id": comment_id,
     }
     return render(request, "gamelibrary/game_detail.html", context)
 

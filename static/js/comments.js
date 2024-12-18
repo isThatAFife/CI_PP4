@@ -51,34 +51,37 @@ for (let button of deleteButtons) {
     });
 }
 
-deleteConfirm.addEventListener("click", function(e) {
-    e.preventDefault();
-    const commentId = this.getAttribute("data-comment-id");
-    const gameSlug = document.querySelector('.btn-delete[data-comment-id="' + commentId + '"]').getAttribute("data-game-slug");
-    const deleteUrl = `/game/${gameSlug}/comment/${commentId}/delete/`;
-    
-    fetch(deleteUrl, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken'),
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    }).then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    }).then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert('Error deleting comment: ' + data.message);
-        }
-    }).catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while deleting the comment');
+    deleteConfirm.addEventListener("click", function(e) {
+        e.preventDefault(); // Prevent any default button behavior
+
+        const commentId = this.getAttribute("data-comment-id");
+        const gameSlug = document.querySelector('.btn-delete[data-comment-id="' + commentId + '"]').getAttribute("data-game-slug");
+        const deleteUrl = `/game/${gameSlug}/comment/${commentId}/delete/`;
+
+        fetch(deleteUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                location.reload(); // Reload page if deletion was successful
+            } else {
+                alert('Error deleting comment: ' + data.message);
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the comment');
+        });
     });
-});
+
+
 
 
 
