@@ -89,13 +89,23 @@
 
 ### Wireframes
 
+#### Homepage
+
 ![homepage](docs/wireframes/homepage.png)
+
+#### About
 
 ![about](docs/wireframes/about.png)
 
+#### Game Detail
+
 ![detail](docs/wireframes/detail.png)
 
+#### My Comments
+
 ![my comments](docs/wireframes/my_comments.png)
+
+#### Homepage Phone Version
 
 ![homepage-phone](docs/wireframes/homepage-phone.png)
 
