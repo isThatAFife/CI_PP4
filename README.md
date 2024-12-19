@@ -109,6 +109,10 @@
 
 ![homepage-phone](docs/wireframes/homepage-phone.png)
 
+### ERD
+
+![erd](docs/erd/graphviz.png)
+
 ---
 
 ## Features
