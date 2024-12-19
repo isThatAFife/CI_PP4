@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
+from datetime import date
 
 
 class Game(models.Model):
@@ -16,9 +18,10 @@ class Game(models.Model):
     metascore = models.IntegerField(default=0)
     console = models.CharField(max_length=200, default="PC")
     userscore = models.DecimalField(max_digits=3, decimal_places=1)
-    date = models.CharField(max_length=100, default="1998")
+    date = models.DateField(null=False, blank=False, default=date(1998, 1, 1))
+    newdate = models.DateField(null=True)
     slug = models.SlugField(max_length=250, blank=True, unique=True)
-    cover_url = models.URLField(blank=True, null=True)
+    cover_url = models.URLField(blank=True, null=True, validators=[URLValidator()])
 
     def clean(self):
         """

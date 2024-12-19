@@ -365,10 +365,10 @@ I used the Code Institute Python Linter to check for syntax and styling errors a
 
 ### HTML W3C Validator
 
-I used the W3C HTML validator and found one error on the about page.
+I used the W3C HTML validator and found none.
 
 ![screenshot](docs/validators/home.png)
-![screenshot](docs/validators/about.png)
+![screenshot](docs/validators/aboutw3c.png)
 ![screenshot](docs/validators/gamedetailw3c.png)
 
 ### Solved Bugs
@@ -433,8 +433,11 @@ Basic layout/templates from I think therefore I blog tutorial
 ### Acknowledgements
 
 [IGDB API for game box art](https://www.igdb.com/api)
+
 [Kaggle for games dataset](https://www.kaggle.com/datasets/destring/metacritic-reviewed-games-since-2000)
+
 [Adobe Color Wheel for colour palette](https://color.adobe.com/create/color-wheel)
+
 [Black for pep8 compliance](https://pypi.org/project/black/)
 
 Big thanks to my mentor Lauren-Nicole Popich for making this mountain seem like a molehill!
