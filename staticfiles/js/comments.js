@@ -32,7 +32,6 @@ for (let button of editButtons) {
     });
 }
 
-
 /**
  * Initializes deletion functionality for the provided delete buttons.
  *
@@ -80,11 +79,6 @@ for (let button of deleteButtons) {
             alert('An error occurred while deleting the comment');
         });
     });
-
-
-
-
-
 
     /**
     * Initializes deletion functionality for the provided delete game buttons.
