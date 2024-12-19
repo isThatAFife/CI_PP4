@@ -11,3 +11,5 @@ urlpatterns = [
     path("search/", views.search_view, name="search"),
     path("<slug:slug>/", views.game_detail, name="game_detail"),
 ]
+
+handler403 = 'gamelibrary.views.permission_denied_view'

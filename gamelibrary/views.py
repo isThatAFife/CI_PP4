@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.views import generic
 from django.conf import settings
 from django.contrib import messages
@@ -481,3 +481,9 @@ def igdb_request(endpoint, query, access_token, client_id):
     }
     response = requests.post(url, headers=headers, data=query)
     return response.json()
+
+def permission_denied_view(request, exception=None):
+    """
+    View for handling permission denied errors.
+    """
+    return redirect('home')
