@@ -18,9 +18,7 @@ class Game(models.Model):
     userscore = models.DecimalField(max_digits=3, decimal_places=1)
     date = models.CharField(max_length=100, default="1998")
     slug = models.SlugField(max_length=250, blank=True, unique=True)
-    cover_url = models.URLField(
-        blank=True, null=True, default="static/images/default.webp"
-    )
+    cover_url = models.URLField(blank=True, null=True)
 
     def clean(self):
         """

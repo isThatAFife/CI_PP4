@@ -433,4 +433,4 @@ Basic layout/templates from I think therefore I blog tutorial
 [Adobe Color Wheel for colour palette](https://color.adobe.com/create/color-wheel)
 [Black for pep8 compliance](https://pypi.org/project/black/)
 
-Big thanks to my tutor Lauren-Nicole Popich for making this mountain seem like a molehill!
+Big thanks to my mentor Lauren-Nicole Popich for making this mountain seem like a molehill!
