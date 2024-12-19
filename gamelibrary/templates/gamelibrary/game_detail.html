@@ -93,6 +93,7 @@
             </div>
         </div>
     </div>
+</div>
 
 <!-- Delete confirmation modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -131,8 +132,6 @@
                 <form id="deleteGameForm" action="{% url 'game_delete' game.slug %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-                
                 </form>
             </div>
         </div>
