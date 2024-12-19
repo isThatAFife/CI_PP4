@@ -167,9 +167,9 @@
 
 ---
 
-  ## Technologies Used
+## Technologies Used
 
-  ### Languages Used
+### Languages Used
 
 - HTML5
 - CSS3
@@ -178,7 +178,7 @@
 - Django
 - SQL - Postgres
 
-  ### Frameworks, Libraries & Programs Used
+### Frameworks, Libraries & Programs Used
 
   Git - For version control.
 
@@ -198,90 +198,90 @@
 
   Balsamiq - To create wireframes
 
-  ### Installed Packages
+### Installed Packages
 
-asgiref==3.8.1
+    asgiref==3.8.1
 
-black==24.10.0
+    black==24.10.0
 
-bleach==6.2.0
+    bleach==6.2.0
 
-certifi==2024.8.30
+    certifi==2024.8.30
 
-cffi==1.17.1
+    cffi==1.17.1
 
-charset-normalizer==3.4.0
+    charset-normalizer==3.4.0
 
-click==8.1.7
+    click==8.1.7
 
-crispy-bootstrap5==0.7
+    crispy-bootstrap5==0.7
 
-cryptography==44.0.0
+    cryptography==44.0.0
 
-defusedxml==0.7.1
+    defusedxml==0.7.1
 
-dj-database-url==0.5.0
+    dj-database-url==0.5.0
 
-Django==4.2.17
+    Django==4.2.17
 
-django-allauth==0.57.2
+    django-allauth==0.57.2
 
-django-crispy-forms==2.3
+    django-crispy-forms==2.3
 
-django-extensions==3.2.3
+    django-extensions==3.2.3
 
-django-summernote==0.8.20.0
+    django-summernote==0.8.20.0
 
-gunicorn==23.0.0
+    gunicorn==23.0.0
 
-idna==3.10
+    idna==3.10
 
-igdb-api-v4==0.3.3
+    igdb-api-v4==0.3.3
 
-mypy-extensions==1.0.0
+    mypy-extensions==1.0.0
 
-oauthlib==3.2.2
+    oauthlib==3.2.2
 
-packaging==24.2
+    packaging==24.2
 
-pathspec==0.12.1
+    pathspec==0.12.1
 
-platformdirs==4.3.6
+    platformdirs==4.3.6
 
-postgres==4.0
+    postgres==4.0
 
-protobuf==5.29.1
+    protobuf==5.29.1
 
-psycopg2==2.9.10
+    psycopg2==2.9.10
 
-psycopg2-binary==2.9.10
+    psycopg2-binary==2.9.10
 
-psycopg2-pool==1.2
+    psycopg2-pool==1.2
 
-pycparser==2.22
+    pycparser==2.22
 
-PyJWT==2.10.1
+    PyJWT==2.10.1
 
-python3-openid==3.2.0
+    python3-openid==3.2.0
 
-requests==2.32.3
+    requests==2.32.3
 
-requests-oauthlib==2.0.0
+    requests-oauthlib==2.0.0
 
-setuptools==75.6.0
+    setuptools==75.6.0
 
-sqlparse==0.5.2
+    sqlparse==0.5.2
 
-style==1.1.0
+    style==1.1.0
 
-urllib3==2.2.3
+    urllib3==2.2.3
 
-webencodings==0.5.1
+    webencodings==0.5.1
 
-whitenoise==5.3.0
+    whitenoise==5.3.0
 
 
-  ---
+---
 
 ## Deployment & Local Development
 
