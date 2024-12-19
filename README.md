@@ -1,7 +1,7 @@
 # GameBox
 [GameBox](https://g4m3b0x-effbc16f1911.herokuapp.com/) is a comprehensive library of games which includes the year of release, metascore, and user score. Users can log in to leave reviews or comments on their favourite games and admins can add, edit, or delete game entries
 
-![screenshot of app](docs/screenshots/homepage.png)
+![screenshot of app](docs/screenshots/responsive.png)
 
 ## Contents
 
